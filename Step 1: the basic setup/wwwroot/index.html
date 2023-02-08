@@ -1,11 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <link rel="manifest" href="/manifest.json">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="ES6PWA">
+    <meta name="theme-color" content="#317EFB"/>
+    <link rel="apple-touch-icon" href="/images/pwa-icon.png">
     <title>ES6PWA</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <script async src='./scripts/app.js'></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script async src="./scripts/app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js');
+            });
+        }
+    </script>
 </head>
 <body>
     <pwa-app></pwa-app>
