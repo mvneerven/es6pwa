@@ -1,18 +1,17 @@
 import { LitElement, html } from "lit";
+import { customElement, eventOptions } from "lit/decorators.js";
 
+@customElement("pwa-name-editor")
 export class NameEditor extends LitElement {
   render() {
     return html`
-      <label for="name">Type your name:</label>
+      <label for="name">Enter your name:</label>
       <input id="name" type="text" @change=${this.handleChange} />
     `;
   }
 
-  /**
-   *
-   * @param {Event & {target: HTMLInputElement}} e
-   */
-  handleChange(e) {
+  @eventOptions({ passive: true })
+  handleChange(e: Event & { target: HTMLInputElement }) {
     const nameChanged = new CustomEvent("nameChanged", {
       detail: { name: e.target.value },
       composed: true,
@@ -21,4 +20,3 @@ export class NameEditor extends LitElement {
     this.dispatchEvent(nameChanged);
   }
 }
-customElements.define("pwa-name-editor", NameEditor);
