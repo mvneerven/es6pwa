@@ -1,7 +1,6 @@
 import { LitElement, html } from "lit";
-import { customElement, eventOptions } from "lit/decorators.js";
+import { eventOptions } from "lit/decorators.js";
 
-@customElement("pwa-name-editor")
 export class NameEditor extends LitElement {
   render() {
     return html`
@@ -20,3 +19,5 @@ export class NameEditor extends LitElement {
     this.dispatchEvent(nameChanged);
   }
 }
+
+customElements.define("pwa-name-editor", NameEditor);
