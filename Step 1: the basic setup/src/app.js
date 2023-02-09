@@ -20,7 +20,10 @@ class Es6PwaApp extends LitElement {
   render() {
     return html`
       <p>Hello, ${this.name}!</p>
-      <pwa-name-editor @nameChanged=${this.handleNameChange}></pwa-name-editor>
+      <pwa-name-editor
+        data-placeholder="Somebody"
+        @nameChanged=${this.handleNameChange}
+      ></pwa-name-editor>
     `;
   }
 

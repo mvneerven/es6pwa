@@ -2,7 +2,9 @@
 
 import { context, build } from "esbuild";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
+// eslint-disable-next-line no-undef
 var args = process.argv.slice(2);
 
 const watch = args.includes("-w");
@@ -35,7 +37,9 @@ const options = {
 
 if (!watch) {
   await build(options);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
+  // eslint-disable-next-line no-undef
   process.exit();
 }
 

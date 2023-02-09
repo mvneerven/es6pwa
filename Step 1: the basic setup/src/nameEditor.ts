@@ -1,11 +1,19 @@
 import { LitElement, html } from "lit";
-import { eventOptions } from "lit/decorators.js";
+import { eventOptions, property } from "lit/decorators.js";
 
 export class NameEditor extends LitElement {
+  @property({ type: String, attribute: "data-placeholder" })
+  placeholder: string;
+
   render() {
     return html`
       <label for="name">Enter your name:</label>
-      <input id="name" type="text" @change=${this.handleChange} />
+      <input
+        id="name"
+        type="text"
+        placeholder=${this.placeholder}
+        @change=${this.handleChange}
+      />
     `;
   }
 
