@@ -1,0 +1,36 @@
+{
+  "name": "es6pwa",
+  "version": "0.0.1",
+  "description": "A fully working vanilla JavaScript PWA, in easy steps",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node build.js -w",
+    "build": "node build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mvneerven/es6pwa.git"
+  },
+  "keywords": [
+    "es6",
+    "pwa"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mvneerven/es6pwa/issues"
+  },
+  "homepage": "https://github.com/mvneerven/es6pwa#readme",
+  "dependencies": {
+    "lit": "2.6.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.51.0",
+    "@typescript-eslint/parser": "^5.51.0",
+    "esbuild": "0.17.6",
+    "eslint": "^8.33.0",
+    "eslint-plugin-lit": "^1.8.2",
+    "typescript": "4.9.5"
+  }
+}
