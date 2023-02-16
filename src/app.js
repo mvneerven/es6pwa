@@ -1,5 +1,12 @@
 import { css, html, LitElement } from "lit";
-import "./nameEditor";
+import { topics } from "./mediator";
+import "./components/nameEditor";
+import "./components/todoEditor";
+import "./components/link";
+import "./components/todoList";
+import { initRouter } from "./router";
+
+initRouter();
 
 class Es6PwaApp extends LitElement {
   static styles = css`
@@ -15,6 +22,7 @@ class Es6PwaApp extends LitElement {
   constructor() {
     super();
     this.name = "Somebody";
+    this.routeController = topics.routeChanged.createController(this);
   }
 
   render() {
@@ -24,7 +32,43 @@ class Es6PwaApp extends LitElement {
         data-placeholder="Somebody"
         @nameChanged=${this.handleNameChange}
       ></pwa-name-editor>
+      <pwa-link .location=${"/addTodo"}>Add todo</pwa-link>
+
+      <section>${this.renderPage()}</section>
     `;
+  }
+
+  renderPage() {
+    if (!this.routeController.topic.value) return;
+
+    const routeData = this.routeController.topic.value.routeData;
+    switch (routeData.page) {
+      case "":
+        return this.renderTodoList();
+      case "editTodo":
+        if (routeData.id) return this.renderEditTodo(routeData.id);
+        else return this.renderNotFound();
+      case "addTodo":
+        return this.renderAddTodo();
+      default:
+        return this.renderNotFound();
+    }
+  }
+
+  renderTodoList() {
+    return html`<pwa-todo-list></pwa-todo-list>`;
+  }
+
+  renderAddTodo() {
+    return html`<pwa-todo-editor></pwa-todo-editor>`;
+  }
+
+  renderEditTodo(id) {
+    return html`<pwa-todo-editor .todoId=${id}></pwa-todo-editor>`;
+  }
+
+  renderNotFound() {
+    return html` <h3>Oooops, page not found!</h3> `;
   }
 
   /**

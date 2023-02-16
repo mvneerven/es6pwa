@@ -5,6 +5,10 @@ export class NameEditor extends LitElement {
   @property({ type: String, attribute: "data-placeholder" })
   placeholder: string;
 
+  constructor() {
+    super();
+  }
+
   render() {
     return html`
       <label for="name">Enter your name:</label>
@@ -27,5 +31,6 @@ export class NameEditor extends LitElement {
     this.dispatchEvent(nameChanged);
   }
 }
-
+//Use this method instead of @customElement because of the bug:
+// https://github.com/runem/lit-analyzer/issues/287
 customElements.define("pwa-name-editor", NameEditor);
