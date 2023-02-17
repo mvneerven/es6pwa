@@ -1,9 +1,8 @@
 import { css, html, LitElement } from "lit";
-import { state } from "lit/decorators.js";
-import { topics } from "../mediator";
-import { goTo } from "../router";
-import { queries, ITodo } from "../todoStore";
+import { routerTopics } from "../router";
+import { ITodo, todoTopics } from "../todoStore";
 import { repeat } from "lit/directives/repeat.js";
+import { TopicController } from "../mediator";
 
 export class TodoList extends LitElement {
   static styles = css`
@@ -25,28 +24,37 @@ export class TodoList extends LitElement {
     }
   `;
 
-  @state()
-  todos: ITodo[];
+  allTodos: TopicController<ITodo[]>;
 
   constructor() {
     super();
+
     this.refreshTodos();
-    topics.todoDeleted.createController(this, this.refreshTodos);
-    topics.todoAdded.createController(this, this.refreshTodos);
+    //Controllers automatically refresh host element,
+    //subscribe and dispose subscription on disconnectedCallback
+    //https://lit.dev/docs/composition/controllers/
+    todoTopics.todoDeleted.createController(this, this.refreshTodos);
+    todoTopics.todoAdded.createController(this, this.refreshTodos);
+    this.allTodos = todoTopics.allTodos.createController(this);
   }
 
   protected refreshTodos() {
-    this.todos = queries.getAll();
+    todoTopics.getAllTodos.publish();
   }
 
   protected render() {
     return html` <ul>
-      ${repeat(this.todos, (t) => t.id, this.renderTodoItem)}
+      ${repeat(
+        this.allTodos.topic.value || [],
+        (t) => t.id,
+        this.renderTodoItem.bind(this)
+      )}
     </ul>`;
   }
 
   protected renderTodoItem(todo: ITodo, index: number) {
-    const itemClickHandler = () => goTo(`/editTodo/${todo.id}`);
+    const itemClickHandler = () =>
+      routerTopics.goTo.publish(`/editTodo/${todo.id}`, this.tagName);
 
     return html` <li
       data-status=${todo.isDone ? "done" : "todo"}

@@ -1,12 +1,13 @@
 import { css, html, LitElement } from "lit";
-import { topics } from "./mediator";
 import "./components/nameEditor";
 import "./components/todoEditor";
 import "./components/link";
 import "./components/todoList";
-import { initRouter } from "./router";
+import { routerTopics } from "./router";
+import { enableTrace } from "./mediator";
 
-initRouter();
+enableTrace();
+routerTopics.initRouter.publish();
 
 class Es6PwaApp extends LitElement {
   static styles = css`
@@ -22,7 +23,10 @@ class Es6PwaApp extends LitElement {
   constructor() {
     super();
     this.name = "Somebody";
-    this.routeController = topics.routeChanged.createController(this);
+    //Controllers automatically refresh host element,
+    //subscribe and dispose subscription on disconnectedCallback
+    //https://lit.dev/docs/composition/controllers/
+    this.routeController = routerTopics.routeChanged.createController(this);
   }
 
   render() {
@@ -63,6 +67,11 @@ class Es6PwaApp extends LitElement {
     return html`<pwa-todo-editor></pwa-todo-editor>`;
   }
 
+  /**
+   *
+   * @param {number} id
+   * @returns
+   */
   renderEditTodo(id) {
     return html`<pwa-todo-editor .todoId=${id}></pwa-todo-editor>`;
   }

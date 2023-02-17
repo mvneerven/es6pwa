@@ -1,10 +1,10 @@
 import { LitElement, html } from "lit";
 import { property } from "lit/decorators.js";
-import { goTo } from "../router";
+import { routerTopics } from "../router";
 
 export class Link extends LitElement {
   @property({ type: String })
-  location: string;
+  location: string | undefined;
 
   constructor() {
     super();
@@ -12,14 +12,18 @@ export class Link extends LitElement {
 
   render() {
     return html`
-      <a @click=${this.handleClick} href=${this.location}><slot></slot></a>
+      <a
+        @click=${this.handleClick}
+        href=${this.location || window.location.pathname}
+        ><slot></slot
+      ></a>
     `;
   }
 
   handleClick(e: Event & { target: HTMLAnchorElement }) {
     e.preventDefault();
     if (window.location.pathname !== location.href) {
-      goTo(this.location);
+      routerTopics.goTo.publish(this.location, this.tagName);
     }
   }
 }

@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "strict": true,
     "outDir": "../wwwroot/scripts",
     "moduleResolution": "node",
     "module": "ES2020",
