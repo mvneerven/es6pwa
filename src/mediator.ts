@@ -33,7 +33,7 @@ class Topic<TSubject> {
   }
 }
 
-export class TopicController<TSubject> implements ReactiveController {
+class TopicController<TSubject> implements ReactiveController {
   topic: Topic<TSubject>;
   private host: LitElement;
   private handler: (this: LitElement, subj: TSubject) => void;
