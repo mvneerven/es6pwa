@@ -3,26 +3,41 @@ import { routerTopics } from "../router";
 import { ITodo, todoTopics } from "../todoStore";
 import { repeat } from "lit/directives/repeat.js";
 import { TopicController } from "../mediator";
+import { iconCss, roundedBlock } from "../sharedStyles";
 
 export class TodoList extends LitElement {
-  static styles = css`
-    li {
-      cursor: pointer;
-      background-color: aquamarine;
-      margin-bottom: 5px;
-    }
+  static styles = [
+    iconCss,
+    roundedBlock,
+    css`
+      :host {
+        display: block;
+        margin-top: 10px;
+      }
+      li {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
 
-    li[data-status="done"] {
-      background-color: cadetblue;
-      text-decoration: line-through;
-    }
+      li[data-status="done"] div {
+        text-decoration: line-through;
+      }
 
-    ul {
-      list-style: none;
-      padding: 0px;
-      margin: 0px;
-    }
-  `;
+      ul {
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+      }
+      .text {
+        width: 100%;
+      }
+      .prio {
+        font-size: 40px;
+        padding-right: 10px;
+      }
+    `,
+  ];
 
   allTodos: TopicController<ITodo[]>;
 
@@ -55,18 +70,25 @@ export class TodoList extends LitElement {
   protected renderTodoItem(todo: ITodo, index: number) {
     const itemClickHandler = () =>
       routerTopics.goTo.publish(`/editTodo/${todo.id}`, this.tagName);
+    const itemKeypressHandler = (e: KeyboardEvent) => {
+      if (e.type === "click" || e.key === "Enter") itemClickHandler();
+    };
 
     return html` <li
+      class="rounded-block"
+      role="link"
+      tabindex="0"
       data-status=${todo.isDone ? "done" : "todo"}
       @click=${itemClickHandler}
+      @keypress=${itemKeypressHandler}
     >
-      <div>
-        <p>${index + 1}. ${todo.isDone ? "Done:" : "Needs to be done:"}</p>
-        <p>${todo.text}</p>
-      </div>
+      <div class="prio">${index + 1}</div>
+      <div class="text">${todo.text}</div>
+      <i class="icon">arrow_right</i>
     </li>`;
   }
 }
+
 //Use this method instead of @customElement because of the bug:
 // https://github.com/runem/lit-analyzer/issues/287
 customElements.define("pwa-todo-list", TodoList);

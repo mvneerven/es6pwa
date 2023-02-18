@@ -1,6 +1,7 @@
-import { html, LitElement } from "lit";
+import { css, html, LitElement } from "lit";
 import { property, query, state } from "lit/decorators.js";
 import { routerTopics } from "../router";
+import { roundedBlock, roundedButton } from "../sharedStyles";
 import { ITodo, todoTopics } from "../todoStore";
 
 export class TodoEditor extends LitElement {
@@ -12,6 +13,38 @@ export class TodoEditor extends LitElement {
 
   @state()
   todo: ITodo | undefined;
+
+  static styles = [
+    roundedBlock,
+    roundedButton,
+    css`
+      :host {
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .buttons {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      button.rounded-button {
+        border: none;
+        font-size: inherit;
+        align-items: center;
+        color: var(--main-color);
+        padding: 10px;
+        cursor: pointer;
+      }
+    `,
+  ];
 
   connectedCallback() {
     super.connectedCallback();
@@ -35,17 +68,34 @@ export class TodoEditor extends LitElement {
   }
 
   protected render() {
-    return html` <form action="#" name="todo">
-        <input type="text" name="text" value=${this.todo?.text || ""} />
+    return html`
+      <form action="#" name="todo">
+        <textarea class="rounded-block" name="text" rows="5">
+${this.todo?.text || ""}
+        </textarea
+        >
+        <section class="buttons">
+          <button
+            class="rounded-button"
+            ?disabled=${!this.canSave}
+            @click=${this.saveTodo}
+          >
+            Save
+          </button>
+          ${this.todoId
+            ? html`
+                <button
+                  class="rounded-button"
+                  ?disabled=${!this.canCompplete}
+                  @click=${this.completeTodo}
+                >
+                  Complete
+                </button>
+              `
+            : ""}
+        </section>
       </form>
-      <button ?disabled=${!this.canSave} @click=${this.saveTodo}>Save</button>
-      ${this.todoId
-        ? html`
-            <button ?disabled=${!this.canCompplete} @click=${this.completeTodo}>
-              Complete
-            </button>
-          `
-        : ""}`;
+    `;
   }
   private get canCompplete() {
     return this.todoId && this.todo;
@@ -54,7 +104,8 @@ export class TodoEditor extends LitElement {
     return (this.todoId && this.todo) || !this.todoId;
   }
 
-  private completeTodo() {
+  private completeTodo(e: Event) {
+    e.preventDefault();
     if (!this.todo) return;
     this.todo.isDone = true;
     this.todo.text = this.getTodoText();
@@ -62,10 +113,11 @@ export class TodoEditor extends LitElement {
   }
 
   private getTodoText() {
-    return new FormData(this.todoForm).get("text")?.toString() || "";
+    return new FormData(this.todoForm).get("text")?.toString().trim() || "";
   }
 
-  private saveTodo() {
+  private saveTodo(e: Event) {
+    e.preventDefault();
     const text = this.getTodoText();
     if (this.todoId && this.todo) {
       this.todo.text = text;
