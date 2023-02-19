@@ -31,6 +31,24 @@ class Es6PwaApp extends LitElement {
         display: flex;
         justify-content: space-between;
       }
+
+      @media only screen and (max-width: 992px) {
+        main {
+          width: 60%;
+        }
+      }
+
+      @media only screen and (max-width: 768px) {
+        main {
+          width: 70%;
+        }
+      }
+      @media only screen and (max-width: 576px) {
+        main {
+          width: 100%;
+          margin: 10px;
+        }
+      }
     `,
     iconCss,
   ];
@@ -42,7 +60,11 @@ class Es6PwaApp extends LitElement {
   constructor() {
     super();
     this.name = "Somebody";
-    this.setAttribute("theme", "dark");
+    const defaultTheme = window.matchMedia("(prefers-color-scheme: dark)")
+      .matches
+      ? "dark"
+      : "light";
+    this.setAttribute("theme", defaultTheme);
 
     //Controllers automatically refresh host element,
     //subscribe and dispose subscription on disconnectedCallback

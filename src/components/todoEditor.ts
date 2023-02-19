@@ -70,10 +70,13 @@ export class TodoEditor extends LitElement {
   protected render() {
     return html`
       <form action="#" name="todo">
-        <textarea class="rounded-block" name="text" rows="5">
-${this.todo?.text || ""}
-        </textarea
+        <textarea
+          class="rounded-block"
+          name="text"
+          rows="5"
+          .value=${this.todo?.text || ""}
         >
+        </textarea>
         <section class="buttons">
           <button
             class="rounded-button"

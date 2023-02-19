@@ -8,10 +8,10 @@ export const darkThemeCss = css`
     --main-color: rgba(213, 213, 214, 1);
 
     --second-bg: rgb(58 58 61);
-    --second-color: rgba(129, 134, 141, 1);
+    --second-color: rgb(183 186 190);
 
     --third-bg: rgb(103 104 106);
-    --third-color: rgb(167 167 167);
+    --third-color: rgb(203 203 203);
   }
 `;
 

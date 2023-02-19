@@ -24,7 +24,11 @@ export class TodoList extends LitElement {
         text-decoration: line-through;
       }
 
-      ul {
+      li[data-status="done"].rounded-block {
+        background-color: var(--third-bg);
+      }
+
+      menu {
         list-style: none;
         padding: 0px;
         margin: 0px;
@@ -35,6 +39,10 @@ export class TodoList extends LitElement {
       .prio {
         font-size: 40px;
         padding-right: 10px;
+      }
+
+      .icon {
+        color: var(--third-color);
       }
     `,
   ];
@@ -58,20 +66,26 @@ export class TodoList extends LitElement {
   }
 
   protected render() {
-    return html` <ul>
+    return html` <menu>
       ${repeat(
         this.allTodos.topic.value || [],
         (t) => t.id,
         this.renderTodoItem.bind(this)
       )}
-    </ul>`;
+    </menu>`;
   }
 
   protected renderTodoItem(todo: ITodo, index: number) {
-    const itemClickHandler = () =>
+    const itemClickHandler = (e: Event) => {
+      if (todo.isDone) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
       routerTopics.goTo.publish(`/editTodo/${todo.id}`, this.tagName);
+    };
     const itemKeypressHandler = (e: KeyboardEvent) => {
-      if (e.type === "click" || e.key === "Enter") itemClickHandler();
+      if (e.type === "click" || e.key === "Enter") itemClickHandler(e);
     };
 
     return html` <li
@@ -84,7 +98,7 @@ export class TodoList extends LitElement {
     >
       <div class="prio">${index + 1}</div>
       <div class="text">${todo.text}</div>
-      <i class="icon">arrow_right</i>
+      <i class="icon">${todo.isDone ? "done" : "arrow_right"}</i>
     </li>`;
   }
 }
