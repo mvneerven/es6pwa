@@ -3,7 +3,11 @@ import { eventOptions, property } from "lit/decorators.js";
 
 export class NameEditor extends LitElement {
   @property({ type: String, attribute: "data-placeholder" })
-  placeholder: string;
+  placeholder: string | undefined;
+
+  constructor() {
+    super();
+  }
 
   render() {
     return html`
@@ -11,7 +15,7 @@ export class NameEditor extends LitElement {
       <input
         id="name"
         type="text"
-        placeholder=${this.placeholder}
+        placeholder=${this.placeholder || ""}
         @change=${this.handleChange}
       />
     `;
@@ -27,5 +31,6 @@ export class NameEditor extends LitElement {
     this.dispatchEvent(nameChanged);
   }
 }
-
+//Use this method instead of @customElement because of the bug:
+// https://github.com/runem/lit-analyzer/issues/287
 customElements.define("pwa-name-editor", NameEditor);
